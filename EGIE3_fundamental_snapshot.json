@@ -1,0 +1,23 @@
+{
+    "currency": "BRL",
+    "marketCap": 33714133735.000004,
+    "shortName": "ENGIE BRASILON      NM",
+    "longName": "Engie Brasil Energia S.A.",
+    "regularMarketChange": 0.29,
+    "regularMarketChangePercent": 0.722,
+    "regularMarketTime": "2025-05-23T20:07:39.000Z",
+    "regularMarketPrice": 40.45,
+    "regularMarketDayHigh": 0,
+    "regularMarketDayRange": "0 - 0",
+    "regularMarketDayLow": 0,
+    "regularMarketVolume": 0,
+    "regularMarketPreviousClose": 40.16,
+    "regularMarketOpen": 40.87,
+    "fiftyTwoWeekRange": "0 - 47.19",
+    "fiftyTwoWeekLow": 0,
+    "fiftyTwoWeekHigh": 47.19,
+    "symbol": "EGIE3",
+    "priceEarnings": 9.929903708554658,
+    "earningsPerShare": 4.1228626,
+    "logourl": "https://icons.brapi.dev/icons/EGIE3.svg"
+}

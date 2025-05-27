@@ -1,0 +1,23 @@
+{
+    "currency": "BRL",
+    "marketCap": 388394118350,
+    "shortName": "ITAUUNIBANCOON      N1",
+    "longName": "Itaú Unibanco Holding S.A.",
+    "regularMarketChange": 0.1,
+    "regularMarketChangePercent": 0.301,
+    "regularMarketTime": "2025-05-23T20:07:35.000Z",
+    "regularMarketPrice": 33.3,
+    "regularMarketDayHigh": 0,
+    "regularMarketDayRange": "0 - 0",
+    "regularMarketDayLow": 0,
+    "regularMarketVolume": 0,
+    "regularMarketPreviousClose": 33.2,
+    "regularMarketOpen": 33.57,
+    "fiftyTwoWeekRange": "0 - 34.34",
+    "fiftyTwoWeekLow": 0,
+    "fiftyTwoWeekHigh": 34.34,
+    "symbol": "ITUB3",
+    "priceEarnings": 8.476614471394946,
+    "earningsPerShare": 3.9419814,
+    "logourl": "https://icons.brapi.dev/icons/ITUB3.svg"
+}

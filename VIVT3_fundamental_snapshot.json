@@ -1,0 +1,23 @@
+{
+    "currency": "BRL",
+    "marketCap": 90079413276,
+    "shortName": "TELEF BRASILON",
+    "longName": "Telefônica Brasil S.A.",
+    "regularMarketChange": 0.0512,
+    "regularMarketChangePercent": 0.185,
+    "regularMarketTime": "2025-05-23T20:07:40.000Z",
+    "regularMarketPrice": 27.66,
+    "regularMarketDayHigh": 0,
+    "regularMarketDayRange": "0 - 0",
+    "regularMarketDayLow": 0,
+    "regularMarketVolume": 0,
+    "regularMarketPreviousClose": 27.6088,
+    "regularMarketOpen": 27.5,
+    "fiftyTwoWeekRange": "0 - 28.89",
+    "fiftyTwoWeekLow": 0,
+    "fiftyTwoWeekHigh": 28.89,
+    "symbol": "VIVT3",
+    "priceEarnings": 15.727699530516432,
+    "earningsPerShare": 1.7466293,
+    "logourl": "https://icons.brapi.dev/icons/VIVT3.svg"
+}

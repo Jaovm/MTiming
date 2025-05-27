@@ -1,0 +1,23 @@
+{
+    "currency": "BRL",
+    "marketCap": 9485333372,
+    "shortName": "SANEPAR     ON      N2",
+    "longName": "Companhia de Saneamento do Paraná - SANEPAR",
+    "regularMarketChange": 0.17,
+    "regularMarketChangePercent": 2.751,
+    "regularMarketTime": "2025-05-23T20:07:37.000Z",
+    "regularMarketPrice": 6.35,
+    "regularMarketDayHigh": 0,
+    "regularMarketDayRange": "0 - 0",
+    "regularMarketDayLow": 0,
+    "regularMarketVolume": 0,
+    "regularMarketPreviousClose": 6.18,
+    "regularMarketOpen": 5.99,
+    "fiftyTwoWeekRange": "0 - 6.41",
+    "fiftyTwoWeekLow": 0,
+    "fiftyTwoWeekHigh": 6.41,
+    "symbol": "SAPR3",
+    "priceEarnings": 3.9786109873321025,
+    "earningsPerShare": 1.5709233,
+    "logourl": "https://icons.brapi.dev/icons/SAPR3.svg"
+}

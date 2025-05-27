@@ -1,0 +1,23 @@
+{
+    "currency": "BRL",
+    "marketCap": 24674401271,
+    "shortName": "TOTVS       ON      NM",
+    "longName": "TOTVS S.A.",
+    "regularMarketChange": 0.7,
+    "regularMarketChangePercent": 1.675,
+    "regularMarketTime": "2025-05-23T20:07:56.000Z",
+    "regularMarketPrice": 42.5,
+    "regularMarketDayHigh": 0,
+    "regularMarketDayRange": "0 - 0",
+    "regularMarketDayLow": 0,
+    "regularMarketVolume": 0,
+    "regularMarketPreviousClose": 41.8,
+    "regularMarketOpen": 41.53,
+    "fiftyTwoWeekRange": "0 - 42.86",
+    "fiftyTwoWeekLow": 0,
+    "fiftyTwoWeekHigh": 42.86,
+    "symbol": "TOTS3",
+    "priceEarnings": 31.874856574619447,
+    "earningsPerShare": 1.3293652,
+    "logourl": "https://icons.brapi.dev/icons/TOTS3.svg"
+}

@@ -1,0 +1,23 @@
+{
+    "currency": "BRL",
+    "marketCap": 75923471834,
+    "shortName": "B3          ON      NM",
+    "longName": "B3 S.A. - Brasil, Bolsa, Balcão",
+    "regularMarketChange": 0.05,
+    "regularMarketChangePercent": 0.349,
+    "regularMarketTime": "2025-05-23T20:07:59.000Z",
+    "regularMarketPrice": 14.39,
+    "regularMarketDayHigh": 0,
+    "regularMarketDayRange": "0 - 0",
+    "regularMarketDayLow": 0,
+    "regularMarketVolume": 0,
+    "regularMarketPreviousClose": 14.34,
+    "regularMarketOpen": 14.71,
+    "fiftyTwoWeekRange": "0 - 15.11",
+    "fiftyTwoWeekLow": 0,
+    "fiftyTwoWeekHigh": 15.11,
+    "symbol": "B3SA3",
+    "priceEarnings": 16.772554002541295,
+    "earningsPerShare": 0.876072,
+    "logourl": "https://icons.brapi.dev/icons/B3SA3.svg"
+}

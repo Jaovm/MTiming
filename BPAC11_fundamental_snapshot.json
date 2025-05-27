@@ -1,0 +1,23 @@
+{
+    "currency": "BRL",
+    "marketCap": null,
+    "shortName": "BTGP BANCO  UNT     N2",
+    "longName": "Banco BTG Pactual S.A.",
+    "regularMarketChange": 0.07,
+    "regularMarketChangePercent": 0.17700000000000002,
+    "regularMarketTime": "2025-05-23T20:07:47.000Z",
+    "regularMarketPrice": 39.69,
+    "regularMarketDayHigh": 0,
+    "regularMarketDayRange": "0 - 0",
+    "regularMarketDayLow": 0,
+    "regularMarketVolume": 0,
+    "regularMarketPreviousClose": 39.62,
+    "regularMarketOpen": 39.84,
+    "fiftyTwoWeekRange": "0 - 41.06",
+    "fiftyTwoWeekLow": 0,
+    "fiftyTwoWeekHigh": 41.06,
+    "symbol": "BPAC11",
+    "priceEarnings": null,
+    "earningsPerShare": null,
+    "logourl": "https://icons.brapi.dev/icons/BPAC11.svg"
+}

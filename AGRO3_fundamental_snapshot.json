@@ -1,0 +1,23 @@
+{
+    "currency": "BRL",
+    "marketCap": 2108117955.0000002,
+    "shortName": "BRASILAGRO  ON      NM",
+    "longName": "BrasilAgro - Companhia Brasileira de Propriedades Agrícolas",
+    "regularMarketChange": 0.31,
+    "regularMarketChangePercent": 1.477,
+    "regularMarketTime": "2025-05-23T20:07:00.000Z",
+    "regularMarketPrice": 21.3,
+    "regularMarketDayHigh": 0,
+    "regularMarketDayRange": "0 - 0",
+    "regularMarketDayLow": 0,
+    "regularMarketVolume": 0,
+    "regularMarketPreviousClose": 20.99,
+    "regularMarketOpen": 21.16,
+    "fiftyTwoWeekRange": "0 - 28.45",
+    "fiftyTwoWeekLow": 0,
+    "fiftyTwoWeekHigh": 28.45,
+    "symbol": "AGRO3",
+    "priceEarnings": 6.792793956221347,
+    "earningsPerShare": 3.1078555,
+    "logourl": "https://icons.brapi.dev/icons/AGRO3.svg"
+}

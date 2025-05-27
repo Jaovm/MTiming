@@ -1,0 +1,23 @@
+{
+    "currency": "BRL",
+    "marketCap": 76652794416,
+    "shortName": "BBSEGURIDADEON      NM",
+    "longName": "BB Seguridade Participações S.A.",
+    "regularMarketChange": 0.34,
+    "regularMarketChangePercent": 0.8999999999999999,
+    "regularMarketTime": "2025-05-23T20:07:45.000Z",
+    "regularMarketPrice": 38.1,
+    "regularMarketDayHigh": 0,
+    "regularMarketDayRange": "0 - 0",
+    "regularMarketDayLow": 0,
+    "regularMarketVolume": 0,
+    "regularMarketPreviousClose": 37.76,
+    "regularMarketOpen": 37.87,
+    "fiftyTwoWeekRange": "0 - 42.77",
+    "fiftyTwoWeekLow": 0,
+    "fiftyTwoWeekHigh": 42.77,
+    "symbol": "BBSE3",
+    "priceEarnings": 8.547796183497788,
+    "earningsPerShare": 4.4490978,
+    "logourl": "https://icons.brapi.dev/icons/BBSE3.svg"
+}

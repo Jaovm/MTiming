@@ -1,0 +1,23 @@
+{
+    "currency": "BRL",
+    "marketCap": 145829818359,
+    "shortName": "BRASIL      ON      NM",
+    "longName": "Banco do Brasil S.A.",
+    "regularMarketChange": -0.63,
+    "regularMarketChangePercent": -2.5149999999999997,
+    "regularMarketTime": "2025-05-23T20:07:58.000Z",
+    "regularMarketPrice": 24.42,
+    "regularMarketDayHigh": 0,
+    "regularMarketDayRange": "0 - 0",
+    "regularMarketDayLow": 0,
+    "regularMarketVolume": 0,
+    "regularMarketPreviousClose": 25.05,
+    "regularMarketOpen": 25.41,
+    "fiftyTwoWeekRange": "0 - 30.04",
+    "fiftyTwoWeekLow": 0,
+    "fiftyTwoWeekHigh": 30.04,
+    "symbol": "BBAS3",
+    "priceEarnings": 6.655652584375737,
+    "earningsPerShare": 3.8133283,
+    "logourl": "https://icons.brapi.dev/icons/BBAS3.svg"
+}

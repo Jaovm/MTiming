@@ -1,0 +1,23 @@
+{
+    "currency": "BRL",
+    "marketCap": 186848396714,
+    "shortName": "WEG         ON      NM",
+    "longName": "WEG S.A.",
+    "regularMarketChange": 0.02,
+    "regularMarketChangePercent": 0.046,
+    "regularMarketTime": "2025-05-23T20:07:56.000Z",
+    "regularMarketPrice": 43.69,
+    "regularMarketDayHigh": 0,
+    "regularMarketDayRange": "0 - 0",
+    "regularMarketDayLow": 0,
+    "regularMarketVolume": 0,
+    "regularMarketPreviousClose": 43.67,
+    "regularMarketOpen": 44.9,
+    "fiftyTwoWeekRange": "0 - 59.83",
+    "fiftyTwoWeekLow": 0,
+    "fiftyTwoWeekHigh": 59.83,
+    "symbol": "WEGE3",
+    "priceEarnings": 29.11528150134048,
+    "earningsPerShare": 1.4922142,
+    "logourl": "https://icons.brapi.dev/icons/WEGE3.svg"
+}

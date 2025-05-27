@@ -1,0 +1,23 @@
+{
+    "currency": "BRL",
+    "marketCap": 81556399591,
+    "shortName": "SABESP      ON      NM",
+    "longName": "Companhia de Saneamento Básico do Estado de São Paulo - SABESP",
+    "regularMarketChange": 1.09,
+    "regularMarketChangePercent": 0.9400000000000001,
+    "regularMarketTime": "2025-05-23T20:07:46.000Z",
+    "regularMarketPrice": 117.06,
+    "regularMarketDayHigh": 0,
+    "regularMarketDayRange": "0 - 0",
+    "regularMarketDayLow": 0,
+    "regularMarketVolume": 0,
+    "regularMarketPreviousClose": 115.97,
+    "regularMarketOpen": 116.21,
+    "fiftyTwoWeekRange": "0 - 119.72",
+    "fiftyTwoWeekLow": 0,
+    "fiftyTwoWeekHigh": 119.72,
+    "symbol": "SBSP3",
+    "priceEarnings": 7.8629557183008325,
+    "earningsPerShare": 14.9790946,
+    "logourl": "https://icons.brapi.dev/icons/SBSP3.svg"
+}

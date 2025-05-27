@@ -1,0 +1,23 @@
+{
+    "currency": "BRL",
+    "marketCap": 34746621381,
+    "shortName": "CEMIG       ON      N1",
+    "longName": "Companhia Energética de Minas Gerais - CEMIG",
+    "regularMarketChange": 0.4,
+    "regularMarketChangePercent": 2.672,
+    "regularMarketTime": "2025-05-23T20:07:00.000Z",
+    "regularMarketPrice": 15.37,
+    "regularMarketDayHigh": 0,
+    "regularMarketDayRange": "0 - 0",
+    "regularMarketDayLow": 0,
+    "regularMarketVolume": 0,
+    "regularMarketPreviousClose": 14.97,
+    "regularMarketOpen": 14.72,
+    "fiftyTwoWeekRange": "0 - 15.99",
+    "fiftyTwoWeekLow": 0,
+    "fiftyTwoWeekHigh": 15.99,
+    "symbol": "CMIG3",
+    "priceEarnings": 6.070013479841509,
+    "earningsPerShare": 2.4480533,
+    "logourl": "https://icons.brapi.dev/icons/CMIG3.svg"
+}

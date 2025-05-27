@@ -1,0 +1,23 @@
+{
+    "currency": "BRL",
+    "marketCap": 12357175543,
+    "shortName": "TAESA       ON      N2",
+    "longName": "Transmissora Aliança de Energia Elétrica S.A.",
+    "regularMarketChange": -0.04,
+    "regularMarketChangePercent": -0.33999999999999997,
+    "regularMarketTime": "2025-05-23T20:06:00.000Z",
+    "regularMarketPrice": 11.72,
+    "regularMarketDayHigh": 0,
+    "regularMarketDayRange": "0 - 0",
+    "regularMarketDayLow": 0,
+    "regularMarketVolume": 0,
+    "regularMarketPreviousClose": 11.76,
+    "regularMarketOpen": 11.73,
+    "fiftyTwoWeekRange": "0 - 12.18",
+    "fiftyTwoWeekLow": 0,
+    "fiftyTwoWeekHigh": 12.18,
+    "symbol": "TAEE3",
+    "priceEarnings": 2.3905922565156357,
+    "earningsPerShare": 4.9150858,
+    "logourl": "https://icons.brapi.dev/icons/TAEE3.svg"
+}

@@ -1,0 +1,23 @@
+{
+    "currency": "BRL",
+    "marketCap": 34067856227.999996,
+    "shortName": "PETRORIO    ON  ATZ NM",
+    "longName": "Prio S.A.",
+    "regularMarketChange": -0.18,
+    "regularMarketChangePercent": -0.462,
+    "regularMarketTime": "2025-05-23T20:07:38.000Z",
+    "regularMarketPrice": 38.8,
+    "regularMarketDayHigh": 0,
+    "regularMarketDayRange": "0 - 0",
+    "regularMarketDayLow": 0,
+    "regularMarketVolume": 0,
+    "regularMarketPreviousClose": 38.98,
+    "regularMarketOpen": 39.47,
+    "fiftyTwoWeekRange": "0 - 50.12",
+    "fiftyTwoWeekLow": 0,
+    "fiftyTwoWeekHigh": 50.12,
+    "symbol": "PRIO3",
+    "priceEarnings": 2.9175805573138236,
+    "earningsPerShare": 13.6371711,
+    "logourl": "https://icons.brapi.dev/icons/PRIO3.svg"
+}

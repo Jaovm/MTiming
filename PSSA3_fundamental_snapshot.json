@@ -1,0 +1,23 @@
+{
+    "currency": "BRL",
+    "marketCap": 32022835629,
+    "shortName": "PORTO SEGUROON      NM",
+    "longName": "Porto Seguro S.A.",
+    "regularMarketChange": 1.16,
+    "regularMarketChangePercent": 2.4,
+    "regularMarketTime": "2025-05-23T20:07:47.000Z",
+    "regularMarketPrice": 49.5,
+    "regularMarketDayHigh": 0,
+    "regularMarketDayRange": "0 - 0",
+    "regularMarketDayLow": 0,
+    "regularMarketVolume": 0,
+    "regularMarketPreviousClose": 48.34,
+    "regularMarketOpen": 48.9,
+    "fiftyTwoWeekRange": "0 - 49.92",
+    "fiftyTwoWeekLow": 0,
+    "fiftyTwoWeekHigh": 49.92,
+    "symbol": "PSSA3",
+    "priceEarnings": 10.944544892774587,
+    "earningsPerShare": 4.3693001,
+    "logourl": "https://icons.brapi.dev/icons/PSSA3.svg"
+}
