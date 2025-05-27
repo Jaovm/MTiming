@@ -17,7 +17,7 @@ st.set_page_config(
 
 # --- Diretórios de Dados ---
 DATA_DIR = "/"
-FUNDAMENTAL_DATA_DIR = "/fundamental"
+FUNDAMENTAL_DATA_DIR = "/"
 
 # --- Lista de Tickers (consistente com a coleta) ---
 TICKERS = [
