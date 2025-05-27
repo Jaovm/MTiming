@@ -380,7 +380,7 @@ with tab2:
                 try: value = float(value.replace('.', '').replace(',', '.'))
                 except: pass
             if value is not None and isinstance(value, (int, float)):
-                column.metric(label, f"{value:{format_spec}}", help=help_text)
+                column.metric(label, f"{value:,.2f}", help=help_text)
             elif value is not None:
                  column.metric(label, str(value), help=help_text)
             else:
