@@ -16,8 +16,8 @@ st.set_page_config(
 )
 
 # --- Diretórios de Dados ---
-DATA_DIR = "."
-FUNDAMENTAL_DATA_DIR = "."
+DATA_DIR = "/home/ubuntu/data"
+FUNDAMENTAL_DATA_DIR = "/home/ubuntu/data/fundamental"
 
 # --- Lista de Tickers (consistente com a coleta) ---
 TICKERS = [
@@ -28,41 +28,30 @@ TICKERS = [
 ]
 
 # --- Funções de Carregamento e Processamento de Dados ---
-@st.cache_data
+@st.cache_data # Usar cache para otimizar o carregamento
 def load_data(file_name):
+    """Carrega um arquivo CSV do diretório de dados macro/mercado."""
     file_path = os.path.join(DATA_DIR, file_name)
     if os.path.exists(file_path):
         try:
-            df = pd.read_csv(file_path)
-            
-            # Verificar se existe coluna 'data' ou similar
-            possible_date_cols = [col for col in df.columns if col.lower() in ['data', 'date', 'Data', 'Date']]
-            if possible_date_cols:
-                df = df.set_index(possible_date_cols[0])
-                df.index = pd.to_datetime(df.index, errors='coerce')
-            else:
-                st.error(f"O arquivo {file_name} não possui coluna de data.")
-                return pd.DataFrame()
-
-            # Tratamento de colunas
-            if len(df.columns) == 1 and df.columns[0].lower() == 'valor':
-                df.columns = [file_name.replace('_data.csv', '')]
-            if 'Close' in df.columns:
-                df['Close'] = pd.to_numeric(df['Close'], errors='coerce')
-            if len(df.columns) == 1:
-                df[df.columns[0]] = pd.to_numeric(df[df.columns[0]], errors='coerce')
-
+            df = pd.read_csv(file_path, index_col="data", parse_dates=True)
+            if not isinstance(df.index, pd.DatetimeIndex):
+                 df.index = pd.to_datetime(df.index)
             df = df.sort_index()
-            df = df.dropna()
-
+            if len(df.columns) == 1 and df.columns[0] == 'valor':
+                df.columns = [file_name.replace('_data.csv', '')]
+            # Garante que a coluna numérica principal seja float
+            if len(df.columns) == 1:
+                 df[df.columns[0]] = pd.to_numeric(df[df.columns[0]], errors='coerce')
+            elif 'Close' in df.columns:
+                 df['Close'] = pd.to_numeric(df['Close'], errors='coerce')
+            df.dropna(inplace=True)
             return df
         except Exception as e:
-            st.error(f"Erro ao carregar {file_name}: {e}")
+            print(f"Erro ao carregar {file_name}: {e}")
             return pd.DataFrame()
     else:
-        st.warning(f"Arquivo não encontrado: {file_name}")
         return pd.DataFrame()
-        
 
 @st.cache_data
 def load_fundamental_snapshot(ticker):
