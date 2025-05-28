@@ -16,8 +16,8 @@ st.set_page_config(
 )
 
 # --- Diretórios de Dados ---
-DATA_DIR = "."
-FUNDAMENTAL_DATA_DIR = "."
+DATA_DIR = "/home/ubuntu/data"
+FUNDAMENTAL_DATA_DIR = "/home/ubuntu/data/fundamental"
 
 # --- Lista de Tickers (consistente com a coleta) ---
 TICKERS = [
@@ -366,54 +366,38 @@ with tab1:
     else:
         st.write("Dados do Ibovespa não disponíveis para o período.")
 
-# --- Aba 2: Valuation (Atual) ---
+# --- Aba 2: Valuation (Atual) --- (Código Omitido para Brevidade)
 with tab2:
     st.header(f"Valuation Atual - {acao_selecionada_valuation}")
     st.info("Atenção: Esta aba exibe os indicadores fundamentalistas *atuais* da ação selecionada. Devido a limitações na fonte de dados gratuita, não foi possível incluir a análise histórica dos múltiplos (P/L, P/VP, etc.).")
-
     dados_acao = fundamental_snapshots.get(acao_selecionada_valuation)
-
     if dados_acao:
         st.subheader("Indicadores Principais")
         col_v1, col_v2, col_v3, col_v4 = st.columns(4)
-
         def display_metric(column, key, label, help_text="", format_spec=":.2f"):
             value = dados_acao.get(key)
-
             if isinstance(value, str):
-                try:
-                    value = float(value.replace('.', '').replace(',', '.'))
-                except Exception:
-                    value = None
-
-            if isinstance(value, (int, float)):
-                try:
-                    column.metric(label, f"{value:{format_spec}}", help=help_text)
-                except ValueError:
-                    column.metric(label, str(value), help=help_text)
+                try: value = float(value.replace('.', '').replace(',', '.'))
+                except: pass
+            if value is not None and isinstance(value, (int, float)):
+                column.metric(label, f"{value:{format_spec}}", help=help_text)
             elif value is not None:
-                column.metric(label, str(value), help=help_text)
+                 column.metric(label, str(value), help=help_text)
             else:
                 column.metric(label, "N/D", help=help_text)
-
         with col_v1:
             display_metric(col_v1, "regularMarketPrice", "Preço Atual", "Preço de fechamento mais recente.", ":,.2f")
             display_metric(col_v1, "marketCap", "Valor de Mercado", "Capitalização de mercado em BRL.", ":,.0f")
-
         with col_v2:
             display_metric(col_v2, "trailingPE", "P/L (12m)", "Preço / Lucro por Ação (últimos 12 meses).")
             display_metric(col_v2, "forwardPE", "P/L (Proj.)", "Preço / Lucro por Ação (projetado).")
-
         with col_v3:
             display_metric(col_v3, "priceToBook", "P/VP", "Preço / Valor Patrimonial por Ação.")
             display_metric(col_v3, "bookValue", "VPA", "Valor Patrimonial por Ação.", ":,.2f")
-
         with col_v4:
             display_metric(col_v4, "trailingAnnualDividendYield", "Dividend Yield (12m)", "Dividendos pagos nos últimos 12 meses / Preço.", ":.2%")
             display_metric(col_v4, "dividendYield", "Dividend Yield (Proj.)", "Dividendos projetados / Preço.", ":.2%")
-
         st.divider()
-
         st.subheader("Detalhes Adicionais")
         summary_profile = dados_acao.get("summaryProfile")
         if summary_profile and isinstance(summary_profile, dict):
