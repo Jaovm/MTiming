@@ -129,9 +129,15 @@ def calculate_market_timing_signals(df_selic, df_ipca, df_desemprego, df_ibov):
         else: signals['ibov'] = 'Lateral'
     else: signals['ibov'] = 'N/D'
 
-    # 5. Determinar Fase do Ciclo (Lógica MUITO Simplificada - EXEMPLO)
+    # 5. Determinar Fase do Ciclo (Lógica Melhorada)
     fase = "Indefinida"
-    if signals.get('selic') in ['Queda', 'Queda Forte', 'Estável'] and \
+    
+    # Verificar se temos dados suficientes para determinar a fase
+    dados_suficientes = all(signals.get(key) != 'N/D' for key in ['selic', 'ipca', 'desemprego', 'ibov'])
+    
+    if not dados_suficientes:
+        fase = "Indefinida (Dados Insuficientes)"
+    elif signals.get('selic') in ['Queda', 'Queda Forte', 'Estável'] and \
        signals.get('ipca') in ['Desacelerando', 'Estável'] and \
        signals.get('desemprego') in ['Caindo', 'Estável'] and \
        signals.get('ibov') == 'Alta (MM50 > MM200)':
@@ -151,6 +157,15 @@ def calculate_market_timing_signals(df_selic, df_ipca, df_desemprego, df_ibov):
          signals.get('desemprego') in ['Subindo', 'Estável'] and \
          signals.get('ibov') in ['Lateral', 'Queda (MM50 < MM200)']:
         fase = "Recuperação"
+    # Regra mais flexível para determinar fase quando não se encaixa perfeitamente
+    elif signals.get('selic') in ['Queda', 'Queda Forte'] and signals.get('ibov') == 'Alta (MM50 > MM200)':
+        fase = "Provável Expansão"
+    elif signals.get('selic') in ['Alta', 'Alta Forte'] and signals.get('ipca') == 'Acelerando':
+        fase = "Provável Pico"
+    elif signals.get('desemprego') == 'Subindo' and signals.get('ibov') == 'Queda (MM50 < MM200)':
+        fase = "Provável Contração"
+    elif signals.get('selic') in ['Queda', 'Queda Forte'] and signals.get('ipca') in ['Desacelerando', 'Estável']:
+        fase = "Provável Recuperação"
 
     signals['fase_ciclo'] = fase
 
@@ -175,17 +190,35 @@ def generate_recommendation(ticker_data, cycle_phase):
     pl = None
     pvp = None
     try:
-        # Tenta obter e converter. Se for None ou não numérico, mantém None.
-        raw_pl = ticker_data.get("trailingPE")
+        # Tenta obter e converter P/L. Verifica múltiplos campos possíveis.
+        # Primeiro tenta priceEarnings (formato da API brapi)
+        raw_pl = ticker_data.get("priceEarnings")
+        # Se não encontrar, tenta trailingPE (formato alternativo)
+        if raw_pl is None:
+            raw_pl = ticker_data.get("trailingPE")
         if raw_pl is not None:
             pl = float(raw_pl)
     except (ValueError, TypeError):
         pl = None # Garante que pl é None se a conversão falhar
+    
     try:
+        # Para P/VP, não há campo direto nos dados atuais
+        # Podemos calcular se tivermos preço e valor patrimonial por ação
         raw_pvp = ticker_data.get("priceToBook")
+        
+        # Se não encontrar diretamente, tenta calcular a partir do preço e VPA
+        if raw_pvp is None and "regularMarketPrice" in ticker_data and "earningsPerShare" in ticker_data:
+            price = ticker_data.get("regularMarketPrice")
+            eps = ticker_data.get("earningsPerShare")
+            # Estimativa simples: assumindo que VPA é aproximadamente 10x EPS para empresas brasileiras
+            # Esta é uma aproximação grosseira e deve ser substituída por dados reais quando disponíveis
+            if price is not None and eps is not None and eps != 0:
+                estimated_vpa = eps * 10  # Estimativa grosseira
+                raw_pvp = price / estimated_vpa
+        
         if raw_pvp is not None:
             pvp = float(raw_pvp)
-    except (ValueError, TypeError):
+    except (ValueError, TypeError, ZeroDivisionError):
         pvp = None # Garante que pvp é None se a conversão falhar
 
     # Formatar múltiplos para exibição (N/D se None)
@@ -247,8 +280,21 @@ df_selic_meta = load_data("selic_meta_data.csv")
 df_selic_efetiva = load_data("selic_efetiva_data.csv")
 df_desemprego = load_data("desemprego_pnad_data.csv")
 df_ibov = load_data("ibov_data.csv")
-df_ibc_br = load_data("ibc-br_data.csv")
-df_vix = load_data("vix_data.csv")
+
+# Inicializa DataFrames vazios para dados que podem não estar disponíveis
+df_ibc_br = pd.DataFrame()
+df_vix = pd.DataFrame()
+
+# Tenta carregar se os arquivos existirem
+try:
+    df_ibc_br = load_data("ibc-br_data.csv")
+except Exception as e:
+    print(f"Aviso: Dados do IBC-Br não disponíveis: {e}")
+
+try:
+    df_vix = load_data("vix_data.csv")
+except Exception as e:
+    print(f"Aviso: Dados do VIX não disponíveis: {e}")
 
 # Fundamental Snapshot
 fundamental_snapshots = {}
