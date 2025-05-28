@@ -16,8 +16,8 @@ st.set_page_config(
 )
 
 # --- Diretórios de Dados ---
-DATA_DIR = "/home/ubuntu/data"
-FUNDAMENTAL_DATA_DIR = "/home/ubuntu/data/fundamental"
+DATA_DIR = "."
+FUNDAMENTAL_DATA_DIR = "."
 
 # --- Lista de Tickers (consistente com a coleta) ---
 TICKERS = [
@@ -172,23 +172,45 @@ def generate_recommendation(ticker_data, cycle_phase):
         return "N/D", "Dados fundamentalistas indisponíveis."
 
     # Extrair múltiplos (tratar possíveis Nones ou erros de conversão)
+    pl = None
+    pvp = None
     try:
-        pl = float(ticker_data.get("trailingPE", 999))
+        # Tenta obter e converter. Se for None ou não numérico, mantém None.
+        raw_pl = ticker_data.get("trailingPE")
+        if raw_pl is not None:
+            pl = float(raw_pl)
     except (ValueError, TypeError):
-        pl = 999 # Valor alto para indicar problema ou ausência
+        pl = None # Garante que pl é None se a conversão falhar
     try:
-        pvp = float(ticker_data.get("priceToBook", 999))
+        raw_pvp = ticker_data.get("priceToBook")
+        if raw_pvp is not None:
+            pvp = float(raw_pvp)
     except (ValueError, TypeError):
-        pvp = 999
+        pvp = None # Garante que pvp é None se a conversão falhar
 
-    # Definir Níveis de Valuation (Exemplo Simplificado)
-    val_pl = "Alto" if pl > 20 else ("Médio" if pl > 10 else "Baixo")
-    val_pvp = "Alto" if pvp > 2 else ("Médio" if pvp > 1 else "Baixo")
+    # Formatar múltiplos para exibição (N/D se None)
+    pl_display = f"{pl:.1f}" if pl is not None else "N/D"
+    pvp_display = f"{pvp:.1f}" if pvp is not None else "N/D"
+
+    # Definir Níveis de Valuation (somente se múltiplos disponíveis)
+    val_pl = "N/D"
+    val_pvp = "N/D"
+    if pl is not None:
+        val_pl = "Alto" if pl > 20 else ("Médio" if pl > 10 else "Baixo")
+    if pvp is not None:
+        val_pvp = "Alto" if pvp > 2 else ("Médio" if pvp > 1 else "Baixo")
 
     # Lógica de Recomendação
     recomendacao = "Neutro"
-    justificativa = f"P/L: {pl:.1f} ({val_pl}), P/VP: {pvp:.1f} ({val_pvp}) em fase de {cycle_phase}."
+    justificativa = f"P/L: {pl_display} ({val_pl}), P/VP: {pvp_display} ({val_pvp}). Fase do ciclo: {cycle_phase}."
 
+    # Se algum múltiplo essencial for N/D, a recomendação é N/D
+    if pl is None or pvp is None:
+        recomendacao = "N/D"
+        justificativa = f"Dados de múltiplos (P/L={pl_display}, P/VP={pvp_display}) indisponíveis ou inválidos. Fase: {cycle_phase}."
+        return recomendacao, justificativa # Retorna imediatamente
+
+    # Lógica baseada na fase e valuation (agora sabemos que pl e pvp não são None)
     if cycle_phase == "Expansão":
         if val_pl == "Baixo" and val_pvp == "Baixo": recomendacao = "Compra Forte"
         elif val_pl != "Alto" and val_pvp != "Alto": recomendacao = "Compra"
@@ -205,16 +227,15 @@ def generate_recommendation(ticker_data, cycle_phase):
         if val_pl == "Baixo" and val_pvp == "Baixo": recomendacao = "Compra"
         elif val_pl != "Alto" and val_pvp != "Alto": recomendacao = "Compra/Neutro"
         else: recomendacao = "Neutro"
-    # Se fase indefinida, recomendação é Neutro
+    # Se fase indefinida, recomendação é Neutro, mas a justificativa já foi montada
     elif cycle_phase == "Indefinida":
          recomendacao = "Neutro"
-         justificativa = f"Fase do ciclo indefinida. P/L: {pl:.1f}, P/VP: {pvp:.1f}."
+         # Ajusta a justificativa para ser mais clara sobre a fase
+         justificativa = f"Fase do ciclo indefinida. P/L: {pl_display} ({val_pl}), P/VP: {pvp_display} ({val_pvp})."
 
-    # Ajuste final para casos sem dados
-    if pl == 999 or pvp == 999:
-        recomendacao = "N/D"
-        justificativa = f"Dados de múltiplos (P/L ou P/VP) indisponíveis ou inválidos. Fase: {cycle_phase}."
-
+    # Atualiza a justificativa final caso não tenha caído no caso de N/D inicial
+    if recomendacao != "N/D":
+        justificativa = f"P/L: {pl_display} ({val_pl}), P/VP: {pvp_display} ({val_pvp}). Fase do ciclo: {cycle_phase}. Recomendação: {recomendacao}."
 
     return recomendacao, justificativa
 
@@ -366,38 +387,54 @@ with tab1:
     else:
         st.write("Dados do Ibovespa não disponíveis para o período.")
 
-# --- Aba 2: Valuation (Atual) --- (Código Omitido para Brevidade)
+# --- Aba 2: Valuation (Atual) ---
 with tab2:
     st.header(f"Valuation Atual - {acao_selecionada_valuation}")
     st.info("Atenção: Esta aba exibe os indicadores fundamentalistas *atuais* da ação selecionada. Devido a limitações na fonte de dados gratuita, não foi possível incluir a análise histórica dos múltiplos (P/L, P/VP, etc.).")
+
     dados_acao = fundamental_snapshots.get(acao_selecionada_valuation)
+
     if dados_acao:
         st.subheader("Indicadores Principais")
         col_v1, col_v2, col_v3, col_v4 = st.columns(4)
+
         def display_metric(column, key, label, help_text="", format_spec=":.2f"):
             value = dados_acao.get(key)
+
             if isinstance(value, str):
-                try: value = float(value.replace('.', '').replace(',', '.'))
-                except: pass
-            if value is not None and isinstance(value, (int, float)):
-                column.metric(label, f"{value:{format_spec}}", help=help_text)
+                try:
+                    value = float(value.replace('.', '').replace(',', '.'))
+                except Exception:
+                    value = None
+
+            if isinstance(value, (int, float)):
+                try:
+                    column.metric(label, f"{value:{format_spec}}", help=help_text)
+                except ValueError:
+                    column.metric(label, str(value), help=help_text)
             elif value is not None:
-                 column.metric(label, str(value), help=help_text)
+                column.metric(label, str(value), help=help_text)
             else:
                 column.metric(label, "N/D", help=help_text)
+
         with col_v1:
             display_metric(col_v1, "regularMarketPrice", "Preço Atual", "Preço de fechamento mais recente.", ":,.2f")
             display_metric(col_v1, "marketCap", "Valor de Mercado", "Capitalização de mercado em BRL.", ":,.0f")
+
         with col_v2:
             display_metric(col_v2, "trailingPE", "P/L (12m)", "Preço / Lucro por Ação (últimos 12 meses).")
             display_metric(col_v2, "forwardPE", "P/L (Proj.)", "Preço / Lucro por Ação (projetado).")
+
         with col_v3:
             display_metric(col_v3, "priceToBook", "P/VP", "Preço / Valor Patrimonial por Ação.")
             display_metric(col_v3, "bookValue", "VPA", "Valor Patrimonial por Ação.", ":,.2f")
+
         with col_v4:
             display_metric(col_v4, "trailingAnnualDividendYield", "Dividend Yield (12m)", "Dividendos pagos nos últimos 12 meses / Preço.", ":.2%")
             display_metric(col_v4, "dividendYield", "Dividend Yield (Proj.)", "Dividendos projetados / Preço.", ":.2%")
+
         st.divider()
+
         st.subheader("Detalhes Adicionais")
         summary_profile = dados_acao.get("summaryProfile")
         if summary_profile and isinstance(summary_profile, dict):
