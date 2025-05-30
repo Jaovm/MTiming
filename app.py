@@ -417,5 +417,5 @@ def identify_similar_cycles(current_signals, historical_data):
     # Analisar dados históricos por janelas de 6 meses
     for year in range(2010, datetime.now().year):
         for month in range(1, 13, 6):  # Janelas de 6 meses
-            try:
-                per
+            finally
+            
