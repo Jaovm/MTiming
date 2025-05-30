@@ -445,4 +445,4 @@ def identify_similar_cycles(current_signals, historical_data):
     similar_periods = sorted(similar_periods, key=lambda x: x['similarity'], reverse=True)
 
     return similar_periods
-(Content truncated due to size limit. Use line ranges to read in chunks)
+
