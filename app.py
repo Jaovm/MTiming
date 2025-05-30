@@ -416,7 +416,36 @@ def identify_similar_cycles(current_signals, historical_data):
     
     # Analisar dados históricos por janelas de 6 meses
     for year in range(2010, datetime.now().year):
-        for month in range(1, 13, 6):  # Janelas de 6 meses
+        for month in [1, 7]:  # Janelas de 6 meses: Janeiro-Junho e Julho-Dezembro
             try:
-                per
-(Content truncated due to size limit. Use line ranges to read in chunks)
+                period_start = datetime(year, month, 1)
+                period_end = (period_start + pd.DateOffset(months=6)) - pd.DateOffset(days=1)
+
+                selic_value = historical_data['selic'].loc[period_start:period_end].mean()
+                ipca_value = historical_data['ipca'].loc[period_start:period_end].mean()
+                desemprego_value = historical_data['desemprego'].loc[period_start:period_end].mean()
+                ibov_value = historical_data['ibov'].loc[period_start:period_end].mean()
+
+                # Checar se algum dado está ausente
+                if pd.isna([selic_value, ipca_value, desemprego_value, ibov_value]).any():
+                    continue  # Pula esse período
+
+                period_features = np.array([selic_value, ipca_value, desemprego_value, ibov_value]).reshape(1, -1)
+                current_vector = np.array(list(current_features.values())).reshape(1, -1)
+
+                similarity = cosine_similarity(current_vector, period_features)[0][0]
+
+                similar_periods.append({
+                    'start': period_start.strftime('%Y-%m-%d'),
+                    'end': period_end.strftime('%Y-%m-%d'),
+                    'similarity': similarity
+                })
+
+            except Exception as e:
+                print(f"Erro ao processar período {year}-{month}: {e}")
+                continue
+
+    # Ordenar pelos mais semelhantes
+    similar_periods = sorted(similar_periods, key=lambda x: x['similarity'], reverse=True)
+
+    return similar_periods
