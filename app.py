@@ -78,44 +78,57 @@ def fetch_bcb_data(series_id, series_name, start_date=None, end_date=None):
     }
     
     try:
-        response = requests.get(url, params=params, timeout=30)
+        # Adicionar timeout para evitar espera infinita
+        response = requests.get(url, params=params, timeout=10)
         response.raise_for_status()
         
-        # Verificar se a resposta não está vazia
-        if not response.text.strip():
+        # Verificar se o conteúdo não está vazio
+        if not response.content:
             st.warning(f"Resposta vazia do BCB para série {series_name} (ID: {series_id})")
             return pd.DataFrame()
             
-        # Tentar converter para JSON com tratamento de erro
+        # Tentar fazer o parse do JSON com tratamento de erro
         try:
             data = response.json()
-        except json.JSONDecodeError as json_err:
-            st.warning(f"Erro ao decodificar JSON do BCB para série {series_name} (ID: {series_id}): {json_err}")
+        except json.JSONDecodeError as je:
+            st.warning(f"Erro ao decodificar JSON do BCB para série {series_name} (ID: {series_id}): {je}")
             return pd.DataFrame()
-            
-        # Verificar se data é uma lista válida e não vazia
+        
+        # Verificar se data é uma lista válida
         if not isinstance(data, list) or len(data) == 0:
-            st.warning(f"Dados inválidos do BCB para série {series_name} (ID: {series_id}): formato inesperado")
+            st.warning(f"Formato de dados inválido do BCB para série {series_name} (ID: {series_id})")
             return pd.DataFrame()
         
-        # Converter para DataFrame
-        df = pd.DataFrame(data)
-        
-        # Verificar se as colunas esperadas existem
-        if 'data' not in df.columns or 'valor' not in df.columns:
-            st.warning(f"Colunas esperadas não encontradas nos dados do BCB para série {series_name} (ID: {series_id})")
+        # Converter para DataFrame com tratamento de erro
+        try:
+            df = pd.DataFrame(data)
+            df['data'] = pd.to_datetime(df['data'], dayfirst=True, errors='coerce')
+            df['valor'] = pd.to_numeric(df['valor'], errors='coerce')
+            
+            # Remover linhas com valores NaN
+            df = df.dropna()
+            
+            if df.empty:
+                st.warning(f"Dados vazios após conversão para série {series_name} (ID: {series_id})")
+                return pd.DataFrame()
+                
+            df = df.set_index('data')
+            df.columns = [series_name]  # Renomeia a coluna para o nome da série
+            
+            return df
+        except Exception as e:
+            st.warning(f"Erro ao processar dados do BCB para série {series_name} (ID: {series_id}): {e}")
             return pd.DataFrame()
             
-        df['data'] = pd.to_datetime(df['data'], dayfirst=True, errors='coerce')
-        df['valor'] = pd.to_numeric(df['valor'], errors='coerce')
-        
-        # Remover linhas com datas inválidas
-        df = df.dropna(subset=['data'])
-        
-        df = df.set_index('data')
-        df.columns = [series_name]  # Renomeia a coluna para o nome da série
-        
-        return df
+    except requests.exceptions.Timeout:
+        st.warning(f"Timeout ao buscar dados do BCB para série {series_name} (ID: {series_id})")
+        return pd.DataFrame()
+    except requests.exceptions.HTTPError as he:
+        st.warning(f"Erro HTTP ao buscar dados do BCB para série {series_name} (ID: {series_id}): {he}")
+        return pd.DataFrame()
+    except requests.exceptions.ConnectionError:
+        st.warning(f"Erro de conexão ao buscar dados do BCB para série {series_name} (ID: {series_id})")
+        return pd.DataFrame()
     except Exception as e:
         st.warning(f"Erro ao buscar dados do BCB para série {series_name} (ID: {series_id}): {e}")
         return pd.DataFrame()
@@ -392,21 +405,19 @@ def calculate_market_timing_signals(df_selic, df_ipca, df_desemprego, df_ibov):
 
     # Adicionar VIX (se disponível)
     df_vix = fetch_yahoo_finance_data("^VIX", period="1mo")
-    if not df_vix.empty and len(df_vix) > 0:
+    if not df_vix.empty and 'Close' in df_vix.columns and len(df_vix) > 0:
         try:
-            last_vix_val = df_vix['Close'].iloc[-1]
-            # Garantir que last_vix_val seja um valor escalar
-            if isinstance(last_vix_val, pd.Series):
-                last_vix_val = last_vix_val.iloc[0] if not last_vix_val.empty else None
+            # Garantir que estamos pegando um valor escalar, não uma Series
+            last_vix_value = df_vix['Close'].iloc[-1]
             
-            if last_vix_val is not None and pd.notna(last_vix_val):
-                last_vix_float = float(last_vix_val)
-                signals['vix'] = f"{last_vix_float:.2f}"
-                if last_vix_float > 30: # Exemplo de limite para alerta
-                    alerts.append(f"⚠️ Alerta: VIX alto ({last_vix_float:.2f})!")
+            # Verificar se é um valor numérico válido
+            if pd.notna(last_vix_value) and isinstance(last_vix_value, (int, float)):
+                signals['vix'] = f"{last_vix_value:.2f}"
+                if last_vix_value > 30: # Exemplo de limite para alerta
+                    alerts.append(f"⚠️ Alerta: VIX alto ({last_vix_value:.2f})!")
             else:
                 signals['vix'] = 'N/D'
-        except (TypeError, ValueError, IndexError) as e:
+        except (IndexError, TypeError, ValueError) as e:
             st.warning(f"Erro ao processar valor do VIX: {e}")
             signals['vix'] = 'N/D'
     else:
@@ -1000,21 +1011,10 @@ def main():
             else:
                 st.metric("Desemprego PNAD", "N/D")
             if not df_ibov.empty:
-                last_ibov_val = df_ibov_hist['Close'].iloc[-1] if len(df_ibov_hist) >= 1 else None
-                prev_ibov_val = df_ibov_hist['Close'].iloc[-2] if len(df_ibov_hist) >= 2 else None
-                delta_ibov = 0.0
-                if prev_ibov_val is not None and pd.notna(prev_ibov_val) and prev_ibov_val != 0:
-                    if last_ibov_val is not None and pd.notna(last_ibov_val):
-                        try:
-                            delta_ibov = ((float(last_ibov_val) / float(prev_ibov_val)) - 1) * 100
-                        except (TypeError, ValueError):
-                            st.warning(f"Error calculating delta_ibov: last={last_ibov_val}, prev={prev_ibov_val}")
-                    else:
-                        st.warning(f"last_ibov_val is invalid: {last_ibov_val}")
-                elif prev_ibov_val == 0:
-                    st.warning("prev_ibov_val is zero, cannot calculate delta.")
-                # else: prev_ibov_val is None or NaN, delta_ibov remains 0.0
-                st.metric("Ibovespa (Fechamento)", f"{last_ibov_val:,.0f}", f"{delta_ibov:.2f}%", delta_color="normal", help="Último valor de fechamento do Índice Bovespa.")
+                last_ibov = df_ibov['Close'].iloc[-1]
+                prev_ibov = df_ibov['Close'].iloc[-2] if len(df_ibov) > 1 else last_ibov
+                delta_ibov = ((last_ibov / prev_ibov) - 1) * 100 if prev_ibov != 0 else 0
+                st.metric("Ibovespa (Fechamento)", f"{last_ibov:,.0f}", f"{delta_ibov:.2f}%", delta_color="normal", help="Último valor de fechamento do Índice Bovespa.")
             else:
                 st.metric("Ibovespa (Fechamento)", "N/D")
         with col4:
